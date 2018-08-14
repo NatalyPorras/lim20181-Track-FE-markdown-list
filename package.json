@@ -18,5 +18,12 @@
   "bugs": {
     "url": "https://github.com/NatalyPorras/lim20181-Track-FE-markdown-list/issues"
   },
-  "homepage": "https://github.com/NatalyPorras/lim20181-Track-FE-markdown-list#readme"
+  "bin": {
+    "md-links": "./index.js"
+  },
+  "homepage": "https://github.com/NatalyPorras/lim20181-Track-FE-markdown-list#readme",
+  "dependencies": {
+    "commander": "^2.17.1",
+    "node-fetch": "^2.2.0"
+  }
 }
