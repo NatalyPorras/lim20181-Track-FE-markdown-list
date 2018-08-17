@@ -11,19 +11,13 @@ const validarExtensionMD = (ruta, options) => {
   }
 }
 const validarExtensionDirectorio = (ruta, files, options) => {
-
   const archivo = ruta + "/" + files
-
   validarExtensionMD(archivo, options);
-
 }
 const contadorURL = (contador,contadorLinkBad,contadorLinkOk) => {
-
   console.log("total" + contador);
   console.log("ok" + contadorLinkBad);
-  console.log("fail" + contadorLinkOk);
-  
-  
+  console.log("fail" + contadorLinkOk);  
 }
 const readFile = (archivo, options) => {
   fs.readFile(archivo, (err, data) => {
@@ -90,11 +84,8 @@ const readFile = (archivo, options) => {
         });
 
       })
-
-      
       contadorURL(contador,contadorLinkBad,contadorLinkOk)
     }
-
   });
 }
 
