@@ -17,15 +17,13 @@ const validarExtensionDirectorio = (ruta, files, options) => {
   validarExtensionMD(archivo, options);
 
 }
-const validarURL = (regexp, cadena) => {
-  var subcadena;
+const contadorURL = (contador,contadorLinkBad,contadorLinkOk) => {
 
-  if (regexp.test(cadena)) {
-    subcadena = ' contiene ';
-  } else if (regexp.test(cadena)) {
-    subcadena = ' no contiene ';
-  }
-  console.log(cadena + '-------->' + subcadena + regexp.source);
+  console.log("total" + contador);
+  console.log("ok" + contadorLinkBad);
+  console.log("fail" + contadorLinkOk);
+  
+  
 }
 const readFile = (archivo, options) => {
   fs.readFile(archivo, (err, data) => {
@@ -55,9 +53,7 @@ const readFile = (archivo, options) => {
               console.log(archivo + ' -- ' + modifiedResult + "fail" + " " + response.status + "(No tiene titulo)");
             }
           }else if (options.validate === undefined && options.stats===true) {
-            console.log(contador);
-            console.log(contadorLinkBad);
-            console.log(contadorLinkOk);
+            contadorURL(contador,contadorLinkBad,contadorLinkOk)
           }
 
         });
@@ -88,14 +84,15 @@ const readFile = (archivo, options) => {
               console.log(archivo + ' -- ' + soloUrl + " " + response.status + "(No tiene titulo)");
             }
           }else if (options.validate === undefined && options.stats===true) {
-            console.log(contador);
-            console.log(contadorLinkBad);
-            console.log(contadorLinkOk);
+           contadorURL(contador,contadorLinkBad,contadorLinkOk)
           }
 
         });
 
       })
+
+      
+      contadorURL(contador,contadorLinkBad,contadorLinkOk)
     }
 
   });
