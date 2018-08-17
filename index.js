@@ -3,10 +3,6 @@
 const fs = require('fs');
 const fetch = require('node-fetch');
 
-let options = {
-  validate: false,
-  stats: false,
-}
 const readFile = (val) => {
   var path = val;
   var path_splitted = path.split('.');
@@ -63,7 +59,6 @@ const readDirect = (val) => {
   });
 }
 const mdLinks = (val,options) => {
-  console.log(options)
   fs.stat(val, (error, data) => {
     if (data.isFile()) {
       readFile(val);
@@ -75,6 +70,6 @@ const mdLinks = (val,options) => {
 module.exports = mdLinks;
 process.argv.forEach((val, index) => {
   if (index === 2) {
-    mdLinks(val,options);
+    mdLinks(val);
   }
 });
