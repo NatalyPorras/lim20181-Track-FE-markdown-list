@@ -1,7 +1,7 @@
 
 const fs = require('fs');
 const fetch = require('node-fetch');
-
+let contador = 0,contadorLinkOk =0 ,contadorLinkBad=0;
 const validarExtensionMD = (ruta, options) => {
 
   const path_splitted = ruta.split('.');
@@ -43,13 +43,23 @@ const readFile = (archivo, options) => {
         let modifiedResult=result.replace(/[\n]/gi, '')
         // console.log(modifiedResult)
         fetch(modifiedResult).then(function (response) {
-          if (response.status >= 200 && response.status < 400) {
-            // contUrlOK++ ;
-            console.log(archivo + ' -- ' + modifiedResult + " " + response.status + "(No tiene titulo)");
-          } else if (response.status >= 400) {
-            // contUrlBad++ ;
-            console.log(archivo + ' -- ' + modifiedResult + " " + response.status + "(No tiene titulo)");
+          contador++;
+          if(options.validate === undefined && options.stats===undefined){
+            console.log(archivo + ' -- ' + modifiedResult + " " +"(No tiene titulo)");
+          }else if(options.validate === true && options.stats===undefined){
+            if (response.status >= 200 && response.status < 400) {
+              contadorLinkOk++;
+              console.log(archivo + ' -- ' + modifiedResult + "ok" + " " + response.status + "(No tiene titulo)");
+            } else if (response.status >= 400) {
+              contadorLinkBad++;
+              console.log(archivo + ' -- ' + modifiedResult + "fail" + " " + response.status + "(No tiene titulo)");
+            }
+          }else if (options.validate === undefined && options.stats===true) {
+            console.log(contador);
+            console.log(contadorLinkBad);
+            console.log(contadorLinkOk);
           }
+
         });
       })
     } 
@@ -65,31 +75,29 @@ const readFile = (archivo, options) => {
         const soloUrl=eliminarCorchete.replace(/[\(\)']/gi, '')
         
         fetch(soloUrl).then(function (response) {
-          if (response.status >= 200 && response.status < 400) {
-            // contUrlOK++ ;
-            console.log(archivo + ' -- ' + soloUrl + " " + response.status + " " +  "'" + textoURL+ "'");
-          } else if (response.status >= 400) {
-            // contUrlBad++ ;
-            console.log(archivo + ' -- ' + soloUrl + " " + response.status + "(No tiene titulo)");
+          contador++;
+          if (options.validate === undefined && options.stats===undefined) {
+            console.log(archivo + ' -- ' + soloUrl +  "'" + textoURL+ "'");
+
+          } else if(options.validate === true && options.stats===undefined) {
+            if (response.status >= 200 && response.status < 400) {
+              contadorLinkOk++;
+              console.log(archivo + ' -- ' + soloUrl + " " + response.status + " " +  "'" + textoURL+ "'");
+            } else if (response.status >= 400) {
+              contadorLinkBad++;
+              console.log(archivo + ' -- ' + soloUrl + " " + response.status + "(No tiene titulo)");
+            }
+          }else if (options.validate === undefined && options.stats===true) {
+            console.log(contador);
+            console.log(contadorLinkBad);
+            console.log(contadorLinkOk);
           }
+
         });
 
       })
     }
 
-    /*       text.replace(expression, (url) => {
-              fetch(url).then(function (response) {
-                if(response.status >= 200 && response.status < 400){
-                  // contUrlOK++ ;
-                  console.log(archivo + " " + url + " " + response.status); 
-                }else if(response.status > 400){
-                  // contUrlBad++ ;
-                  console.log(archivo + " " + url + " " + response.status); 
-                }
-                // console.log(contUrlOK,contUrlBad);
-    
-              });
-          }) */
   });
 }
 
