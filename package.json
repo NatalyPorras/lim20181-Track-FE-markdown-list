@@ -19,11 +19,12 @@
     "url": "https://github.com/NatalyPorras/lim20181-Track-FE-markdown-list/issues"
   },
   "bin": {
-    "md-links": "./index.js"
+    "md-links": "./cli.js"
   },
   "homepage": "https://github.com/NatalyPorras/lim20181-Track-FE-markdown-list#readme",
   "dependencies": {
     "commander": "^2.17.1",
-    "node-fetch": "^2.2.0"
+    "node-fetch": "^2.2.0",
+    "path": "^0.12.7"
   }
 }

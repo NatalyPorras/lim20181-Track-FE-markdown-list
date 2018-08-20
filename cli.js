@@ -1,14 +1,20 @@
+#!/usr/bin/env node
+
 const mdlinks= require ("./index.js");
-var program = require('commander');
+const program = require('commander');
+let options = {
+    validate:null,
+    stats:null
+}
  program
   .arguments('<file>')
   .option('-v, --validate', 'The user to authenticate as')
   .option('-s, --stats', 'The user\'s password')
   .action(function(file){
-    console.log(program.validate,program.stats);
-    mdlinks(file);
+    
+    options.validate = program.validate;
+    options.stats = program.stats;
+
+    mdlinks(file,options)
   })
   .parse(process.argv);
-
-
-zz
