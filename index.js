@@ -1,25 +1,25 @@
 
 const fs = require('fs');
 const fetch = require('node-fetch');
+let contador = 0,contadorLinkOk =0 ,contadorLinkBad=0;
+const validarExtensionMD = (ruta, options) => {
 
-const validarExtensionMD = (ruta,options) => {
-  console.log(options);
-  
   const path_splitted = ruta.split('.');
   const extension = path_splitted.pop();
   if (extension == 'md') {
-    readFile(ruta,options);
+    readFile(ruta, options);
   }
 }
 const validarExtensionDirectorio = (ruta, files, options) => {
-
   const archivo = ruta + "/" + files
-
-  validarExtensionMD(archivo,options);
-
+  validarExtensionMD(archivo, options);
 }
-
-const readFile = (archivo,options) => {
+const contadorURL = (contador,contadorLinkBad,contadorLinkOk) => {
+  console.log("total" + contador);
+  console.log("ok" + contadorLinkBad);
+  console.log("fail" + contadorLinkOk);  
+}
+const readFile = (archivo, options) => {
   fs.readFile(archivo, (err, data) => {
     const text = data.toString();
 
@@ -28,57 +28,64 @@ const readFile = (archivo,options) => {
     let result1 = text.match(reg1);
     let result2 = text.match(reg2);
 
-    if (result1&&result2) {
+    // validarURL(reg1,result1)
+    // validarURL(reg2,result2)
+    if (result1) {
       result1.forEach(result => {
-              fetch(result).then(function (response) {
-                if(response.status >= 200 && response.status < 400){
-                  // contUrlOK++ ;
-                  console.log(archivo + " " + result + " " + response.status + "No tiene titulo"); 
-                }else if(response.status > 400){
-                  // contUrlBad++ ;
-                  console.log(archivo + " " + result + " " + response.status + "No tiene titulo"); 
-                }
-                // console.log(contUrlOK,contUrlBad);
-                /* else if () {
+        let modifiedResult=result.replace(/[\n]/gi, '')
+        // console.log(modifiedResult)
+        fetch(modifiedResult).then(function (response) {
+          contador++;
+          if(options.validate === undefined && options.stats===undefined){
+            console.log(archivo + ' -- ' + modifiedResult + " " +"(No tiene titulo)");
+          }else if(options.validate === true && options.stats===undefined){
+            if (response.status >= 200 && response.status < 400) {
+              contadorLinkOk++;
+              console.log(archivo + ' -- ' + modifiedResult + "ok" + " " + response.status + "(No tiene titulo)");
+            } else if (response.status >= 400) {
+              contadorLinkBad++;
+              console.log(archivo + ' -- ' + modifiedResult + "fail" + " " + response.status + "(No tiene titulo)");
+            }
+          }else if (options.validate === undefined && options.stats===true) {
+            contadorURL(contador,contadorLinkBad,contadorLinkOk)
+          }
+
+        });
+      })
+    } 
+    if(result2) {
+      // console.log(contUrlOK,contUrlBad);
       result2.forEach(result => {
-        console.log(result)
+        //despejar texto de la url
+        const eliminarParentesis = result.replace(/\(.*\)/g, '');
+        const textoURL  = eliminarParentesis.replace(/[\[\]']/gi, '');
+        console.log(textoURL);
+    //despejar url
+        const eliminarCorchete=result.replace(/\[.*\]/g, '');
+        const soloUrl=eliminarCorchete.replace(/[\(\)']/gi, '')
+        
+        fetch(soloUrl).then(function (response) {
+          contador++;
+          if (options.validate === undefined && options.stats===undefined) {
+            console.log(archivo + ' -- ' + soloUrl +  "'" + textoURL+ "'");
 
-        console.log( result.replace(/[\[\]]/g, '') );
+          } else if(options.validate === true && options.stats===undefined) {
+            if (response.status >= 200 && response.status < 400) {
+              contadorLinkOk++;
+              console.log(archivo + ' -- ' + soloUrl + " " + response.status + " " +  "'" + textoURL+ "'");
+            } else if (response.status >= 400) {
+              contadorLinkBad++;
+              console.log(archivo + ' -- ' + soloUrl + " " + response.status + "(No tiene titulo)");
+            }
+          }else if (options.validate === undefined && options.stats===true) {
+           contadorURL(contador,contadorLinkBad,contadorLinkOk)
+          }
 
-      }) */
-    
-              });
-          })
-    }else {
-      console.log("no es url");
-      
+        });
+
+      })
+      contadorURL(contador,contadorLinkBad,contadorLinkOk)
     }
-    /*  .forEach((item) => {
- 
-     console.log(item)
-   }); */
-    // console.log(result2)
-
-    /*  .forEach((item) => {
- 
-     console.log(item)
-     console.log( item.replace(/[\[\]]/g, '') );
-   }); */
-    // console.log(result2)
-
-    /*       text.replace(expression, (url) => {
-              fetch(url).then(function (response) {
-                if(response.status >= 200 && response.status < 400){
-                  // contUrlOK++ ;
-                  console.log(archivo + " " + url + " " + response.status); 
-                }else if(response.status > 400){
-                  // contUrlBad++ ;
-                  console.log(archivo + " " + url + " " + response.status); 
-                }
-                // console.log(contUrlOK,contUrlBad);
-    
-              });
-          }) */
   });
 }
 
@@ -88,7 +95,7 @@ const readDirect = (val, options) => {
       throw err;
     }
     for (let i = 0; i < files.length; i++) {
-      validarExtensionDirectorio(val, files[i],options);
+      validarExtensionDirectorio(val, files[i], options);
       let newDirectory = val + '/' + files[i];
       fs.stat(newDirectory, (err, stat) => {
         if (stat.isDirectory()) {
