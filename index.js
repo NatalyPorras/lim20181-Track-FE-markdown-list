@@ -1,4 +1,3 @@
-
 const fs = require('fs');
 const fetch = require('node-fetch');
 let contador = 0,contadorLinkOk =0 ,contadorLinkBad=0;
