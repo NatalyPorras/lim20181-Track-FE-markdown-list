@@ -1,15 +1,18 @@
-
+const path = require('path');
 const fs = require('fs');
 const fetch = require('node-fetch');
-let contador = 0,contadorLinkOk =0 ,contadorLinkBad=0;
-const validarExtensionMD = (ruta, options) => {
 
-  const path_splitted = ruta.split('.');
-  const extension = path_splitted.pop();
-  if (extension == 'md') {
-    readFile(ruta, options);
-  }
-}
+/* let miPrimeraPromise = new Promise((resolve, reject) => {
+  // Llamamos a resolve(...) cuando lo que estabamos haciendo finaliza con éxito, y reject(...) cuando falla.
+  // En este ejemplo, usamos setTimeout(...) para simular código asíncrono. 
+  // En la vida real, probablemente uses algo como XHR o una API HTML5.
+  setTimeout(function(){
+    resolve("¡Éxito!"); // ¡Todo salió bien!
+  }, 250);
+}); */
+/* let contador = 0,contadorLinkOk =0 ,contadorLinkBad=0;
+
+
 const validarExtensionDirectorio = (ruta, files, options) => {
   const archivo = ruta + "/" + files
   validarExtensionMD(archivo, options);
@@ -19,6 +22,7 @@ const contadorURL = (contador,contadorLinkBad,contadorLinkOk) => {
   console.log("ok" + contadorLinkBad);
   console.log("fail" + contadorLinkOk);  
 }
+
 const readFile = (archivo, options) => {
   fs.readFile(archivo, (err, data) => {
     const text = data.toString();
@@ -84,8 +88,10 @@ const readFile = (archivo, options) => {
         });
 
       })
+
       contadorURL(contador,contadorLinkBad,contadorLinkOk)
     }
+
   });
 }
 
@@ -104,16 +110,53 @@ const readDirect = (val, options) => {
       })
     }
   });
+} */
+const leerArchivo = (newRuta) =>{
+  fs.readFile(newRuta, (err, data) => {
+    const text = data.toString();
+    console.log(data);
+/*     const reg1 = /[^()](ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/gi;
+    const reg2 = /\[([\w\s]*)\]\((ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?\)/gi;
+    let result1 = text.match(reg1);
+    let result2 = text.match(reg2); */
+
+    // validarURL(reg1,result1)
+    // validarURL(reg2,result2)
+ 
+ 
+
+  });
+}
+const validarArchivo = (newRuta) =>{
+
+  const extension = path.extname(newRuta);
+  if (extension == 'md') {
+    leerArchivo(newRuta);
+  }
+}
+const existRuta = (ruta) => {
+let newRuta = "." + ruta;
+
+  fs.open(newRuta, 'r', (err, fd) => {
+    if (err) {
+      if (err.code === 'ENOENT') {
+        console.error('myfile does not exist');
+        return;
+      }
+  
+      throw err;
+    }else {
+        validarArchivo(newRuta);
+    }
+    });
 }
 
 const mdLinks = (ruta, options) => {
-  fs.stat(ruta, (error, data) => {
-    if (data.isFile()) {
-      validarExtensionMD(ruta, options);
-    } else if (data.isDirectory()) {
-      readDirect(ruta, options);
+    if (path.isAbsolute(ruta)) {
+      existRuta(ruta);
+    } else {
+      console.log("Ingresa una ruta correcta")
     }
-  })
 }
 
 module.exports = mdLinks;
