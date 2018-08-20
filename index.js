@@ -160,4 +160,3 @@ const mdLinks = (ruta, options) => {
 }
 
 module.exports = mdLinks;
-
