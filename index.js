@@ -3,7 +3,6 @@ const fs = require('fs');
 const fetch = require('node-fetch');
 
 const validarExtensionMD = (ruta,options) => {
-  console.log(options);
   
   const path_splitted = ruta.split('.');
   const extension = path_splitted.pop();
@@ -28,30 +27,29 @@ const readFile = (archivo,options) => {
     let result1 = text.match(reg1);
     let result2 = text.match(reg2);
 
-    if (result1&&result2) {
+    if (result1) {
       result1.forEach(result => {
-              fetch(result).then(function (response) {
+        console.log(archivo + ' ' + result)
+/*               fetch(result).then(function (response) {
                 if(response.status >= 200 && response.status < 400){
                   // contUrlOK++ ;
-                  console.log(archivo + " " + result + " " + response.status + "No tiene titulo"); 
+                  // console.log(archivo + " " + result + " " + response.status + "No tiene titulo"); 
                 }else if(response.status > 400){
                   // contUrlBad++ ;
-                  console.log(archivo + " " + result + " " + response.status + "No tiene titulo"); 
+                    // console.log(archivo + " " + result + " " + response.status + "No tiene titulo"); 
                 }
+
+              })  */
+            }) 
                 // console.log(contUrlOK,contUrlBad);
-                /* else if () {
+        }
+       if (result2) {
       result2.forEach(result => {
-        console.log(result)
+        console.log(archivo + ' ' + result)
 
-        console.log( result.replace(/[\[\]]/g, '') );
+          // console.log( result.replace(/[\[\]]/g, '') );
 
-      }) */
-    
-              });
-          })
-    }else {
-      console.log("no es url");
-      
+      }) 
     }
     /*  .forEach((item) => {
  
