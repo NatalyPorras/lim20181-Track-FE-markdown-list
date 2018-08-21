@@ -30,7 +30,8 @@ const readDirect = (val, options) => {
 } */
 
 const datosObjeto = (elemento,newRuta) =>{
-  const objLinks = {}
+  const objLinks = {};
+
   if (elemento.substr(0, 1) === '[' && elemento.substr(-1, 1) === ')') {
 
     const eliminarParentesis = elemento.replace(/\(.*\)/g, '');
@@ -44,6 +45,7 @@ const datosObjeto = (elemento,newRuta) =>{
     objLinks.file = newRuta;
 
     return objLinks;
+    
   } else {
     let modifiedResult = elemento.replace(/[\n]/gi, '')
 
