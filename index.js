@@ -29,23 +29,18 @@ const readDirect = (val, options) => {
   });
 } */
 const statusURL = (links) => {
-  let stats =fetch(links.href)
+  let stats = fetch(links.href)
     .then(elemento => {
-      links.status = elemento.status;
-      
-      if (elemento.status >= 200 && elemento.status < 400) {
-        /*         console.log(links.href + ' ok ' +elemento.status);
-         */
-      } else if (elemento.status >= 400) {
-        /*       console.log(links.href + ' fail ' +elemento.status);
-         */
-      }
+      return links.status = elemento.status;
     })
     .catch(error => {
-      links.status = error.code;
+      return links.status = error.code;
 /*     console.log(links.href + ' --- ' + error.code)
+
  */  })
-return stats
+
+
+  return stats
 }
 
 const datosObjeto = (elemento, newRuta) => {
@@ -86,10 +81,11 @@ const leerArchivo = (newRuta) => {
 
     const arrayLinks = urlsTotal.map(elemento => {
       const links = datosObjeto(elemento, newRuta)
-      const stats=statusURL(links);
+      const stats = statusURL(links);
       return stats;
     });
-    console.log(arrayLinks);
+console.log(arrayLinks)
+
     return arrayLinks;
   })
 }
@@ -97,25 +93,36 @@ const validarArchivo = (newRuta) => {
 
   const extension = path.extname(newRuta);
   console.log(extension);
-
   if (extension == '.md') {
     leerArchivo(newRuta);
   } else {
     console.log("no es md");
-
   }
 }
 
+['readme.md']
+['uno.md', 'dos.md','tres.md']
+ const leerMd = (arr) => {
+   arr.for
+   fs.readFile()
+   [{},{},{}]
+ }
 
 const mdLinks = (ruta, options) => {
-  fs.stat(ruta, (err, data) => {
-    if (err) return reject(err);
-    if (data.isFile()) {
-      return validarArchivo(ruta);
-    } else {
-      return validarArchivo(ruta);
-    };
-  });
+  return new Promise((resolve, reject)=>{
+    fs.stat(ruta, (err, data) => {
+      if (err) return reject(err);
+      if (data.isFile()) {
+        return resolve(validarArchivo(ruta))
+      } else {
+        return validarArchivo(ruta);
+      };
+    });
+  })
+
+
+  
+ 
 }
 
 module.exports = mdLinks;
