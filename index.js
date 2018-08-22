@@ -28,8 +28,27 @@ const readDirect = (val, options) => {
     }
   });
 } */
+const statusURL = (links) => {
+  let stats =fetch(links.href)
+    .then(elemento => {
+      links.status = elemento.status;
+      
+      if (elemento.status >= 200 && elemento.status < 400) {
+        /*         console.log(links.href + ' ok ' +elemento.status);
+         */
+      } else if (elemento.status >= 400) {
+        /*       console.log(links.href + ' fail ' +elemento.status);
+         */
+      }
+    })
+    .catch(error => {
+      links.status = error.code;
+/*     console.log(links.href + ' --- ' + error.code)
+ */  })
+return stats
+}
 
-const datosObjeto = (elemento,newRuta) =>{
+const datosObjeto = (elemento, newRuta) => {
   const objLinks = {};
 
   if (elemento.substr(0, 1) === '[' && elemento.substr(-1, 1) === ')') {
@@ -45,7 +64,7 @@ const datosObjeto = (elemento,newRuta) =>{
     objLinks.file = newRuta;
 
     return objLinks;
-    
+
   } else {
     let modifiedResult = elemento.replace(/[\n]/gi, '')
 
@@ -58,18 +77,20 @@ const datosObjeto = (elemento,newRuta) =>{
 }
 
 const leerArchivo = (newRuta) => {
-    fs.readFile(newRuta, (err, data) => {
-      if (err) throw err;
-      const text = data.toString();
-      const reg1 = /[^()](ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/gi;
-      const reg2 = /\[([\w\s]*)\]\((ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?\)/gi;
-      const urlsTotal = text.match(reg1).concat(text.match(reg2));
+  fs.readFile(newRuta, (err, data) => {
+    if (err) throw err;
+    const text = data.toString();
+    const reg1 = /[^()](ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/gi;
+    const reg2 = /\[([\w\s]*)\]\((ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?\)/gi;
+    const urlsTotal = text.match(reg1).concat(text.match(reg2));
 
-      const arrayLinks=urlsTotal.map(elemento => {
-        const links = datosObjeto(elemento,newRuta)
-        return links;
-      });
-      console.log(arrayLinks);
+    const arrayLinks = urlsTotal.map(elemento => {
+      const links = datosObjeto(elemento, newRuta)
+      const stats=statusURL(links);
+      return stats;
+    });
+    console.log(arrayLinks);
+    return arrayLinks;
   })
 }
 const validarArchivo = (newRuta) => {
