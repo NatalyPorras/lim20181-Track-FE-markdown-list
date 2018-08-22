@@ -111,52 +111,67 @@ const readDirect = (val, options) => {
     });
   });
 } */
-const leerArchivo = (newRuta) =>{
+const leerArchivo = (newRuta) => {
+
   fs.readFile(newRuta, (err, data) => {
     const text = data.toString();
     console.log(data);
-/*     const reg1 = /[^()](ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/gi;
-    const reg2 = /\[([\w\s]*)\]\((ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?\)/gi;
-    let result1 = text.match(reg1);
-    let result2 = text.match(reg2); */
+    /*     const reg1 = /[^()](ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/gi;
+        const reg2 = /\[([\w\s]*)\]\((ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?\)/gi;
+        let result1 = text.match(reg1);
+        let result2 = text.match(reg2); */
 
     // validarURL(reg1,result1)
     // validarURL(reg2,result2)
- 
- 
+
+
 
   });
 }
-const validarArchivo = (newRuta) =>{
+const validarArchivo = (newRuta) => {
 
   const extension = path.extname(newRuta);
   if (extension == 'md') {
     leerArchivo(newRuta);
   }
 }
-const existRuta = (ruta) => {
-let newRuta = "." + ruta;
-
-  fs.open(newRuta, 'r', (err, fd) => {
+const existRuta = (ruta,data) => {
+  fs.open(ruta, 'r', (err, fd) => {
     if (err) {
       if (err.code === 'ENOENT') {
         console.error('myfile does not exist');
         return;
       }
-  
+
       throw err;
-    }else {
-        validarArchivo(newRuta);
+    } else {
+      if(data.isFile()){
+        
+        validarArchivo(ruta);
+
+      }else if(data.isDirectory()){
+        validarArchivo(ruta);
+      }
     }
-    });
+/* 
+    fs.close(fd, function (err) {
+      if (err) {
+        console.log(err);
+      }
+      console.log(fd);
+      
+      console.log("File closed successfully.");
+    }); */
+  });
 }
 
 const mdLinks = (ruta, options) => {
-    if (path.isAbsolute(ruta)) {
-      existRuta(ruta);
-    } else {
-      console.log("Ingresa una ruta correcta")
-    }
+  fs.stat(ruta,(err,data)=>{
+
+      existRuta(ruta,data);
+
+    })
+  
 }
 
 module.exports = mdLinks;
