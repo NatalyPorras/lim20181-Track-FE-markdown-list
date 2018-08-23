@@ -15,6 +15,8 @@ let options = {
     options.validate = program.validate;
     options.stats = program.stats;
 
-    mdLinks(file,options)
+    mdLinks(file,options).then(data =>{
+      console.log(data);
+    })
   })
   .parse(process.argv);
