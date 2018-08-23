@@ -14,6 +14,7 @@ const validarExtensionDirectorio = (ruta, files, options) => {
 
   const archivo = ruta + "/" + files
 
+  
   validarExtensionMD(archivo, options);
 
 }
