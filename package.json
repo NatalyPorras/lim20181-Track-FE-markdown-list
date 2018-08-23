@@ -1,6 +1,6 @@
 {
   "name": "linksmarkdown",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "[Markdown](https://es.wikipedia.org/wiki/Markdown) es un lenguaje de marcado\r ligero muy popular entre developers. Es usado en muchísimas plataformas que\r manejan texto plano (GitHub, foros, blogs, ...), y es muy común\r encontrar varios archivos en ese formato en cualquier tipo de repositorio\r (empezando por el tradicional `README.md`).",
   "main": "index.js",
   "directories": {
@@ -24,6 +24,7 @@
   "homepage": "https://github.com/NatalyPorras/lim20181-Track-FE-markdown-list#readme",
   "dependencies": {
     "commander": "^2.17.1",
-    "node-fetch": "^2.2.0"
+    "node-fetch": "^2.2.0",
+    "path": "^0.12.7"
   }
 }

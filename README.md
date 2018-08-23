@@ -81,58 +81,12 @@ Tópicos:
 - [marked](https://github.com/markedjs/marked)
 - [Asíncronía en js](https://carlosazaustre.com/manejando-la-asincronia-en-javascript/)
 
-### Documentación requerida
-
-En el archivo _README_ de tu proyecto tendrás que incluir:
-
-- Descripción general de la librería.
-- Instrucciones de instalación.
-- Versiones de la librería.
-- Documentación de la Librería (Features, link de Demo, test, etc...).
-- Ejemplos (_snippets_) de uso.
-
-Y todo lo relevante para que cualquier developer que quiera usar tu librería pueda hacerlo sin inconvenientes
-
-### Archivos del proyecto
-
-- `README.md` con descripción del módulo, instrucciones de instalación, uso y
-  documentación del API.
-- `index.js`: Desde este archivo debes exportar una función (`mdLinks`).
-- `package.json` con nombre, versión, descripción, autores, licencia,
-  dependencias, scripts (pretest, test, ...)
-- `.editorconfig` con configuración para editores de texto. Este archivo no se
-  debe cambiar.
-- `.eslintrc` con configuración para linter. Este archivo no
-  se debe cambiar.
-- `.gitignore` para ignorar `node_modules` u otras carpetas que no deban
-  incluirse en control de versiones (`git`).
-- `test/md-links.spec.js` debe contener los tests unitarios para la función
-  `mdLinks()`tu inplementación debe pasar estos tets.
 
 ### JavaScript API
 
 El módulo debe poder importarse en otros scripts de Node.js y debe ofrecer la
 siguiente interfaz:
 
-#### `mdLinks(path, options)`
-
-##### Argumentos
-
-- `path`: Ruta absoluta o relativa al archivo o directorio. Si la ruta pasada es relativa, debe resolverse como relativa al directorio desde donde se invoca node - _currentworking directory_).
-
-- `options`: Un objeto con las siguientes propiedades:
-  - `validate`: Valor que determina si se desea validar los links encontrados en el archivo. (tipo de dato booleano)
-  - `stats`: Valor que determina si se desea calcular los stats de de los links encontrados en el archivo. (tipo de dato booleano)
-
-##### Valor de retorno
-
-La función debe retornar una promesa (`Promise`) que resuelva a un arreglo
-(`Array`) de objetos (_Object_), donde cada objeto representa un link y contiene
-las siguientes propiedades:
-
-- `href`: URL encontrada.
-- `text`: Texto que aparecía dentro del link (`<a>`).
-- `file`: Ruta del archivo donde se encontró el link.
 
 #### Ejemplo
 
@@ -228,17 +182,6 @@ Unique: 3
 Broken: 1
 ```
 
-## Entregables
-
-Módulo instalable via `npm install <github-user>/md-links`. Este módulo debe
-incluir tanto un ejecutable como una interfaz que podamos importar con `require`
-para usarlo programáticamente.
-
-## Hacker edition
-
-- Puedes agregar más estadísticas.
-- Integración continua con Travis o Circle CI.
-
 ## Pistas / Tips / Recursos
 
 ### Pistas
@@ -268,57 +211,3 @@ para usarlo programáticamente.
 - [¿Qué es Node.js y para qué sirve? - drauta.com](https://www.drauta.com/que-es-nodejs-y-para-que-sirve)
 - [¿Qué es Nodejs? Javascript en el Servidor - Fazt en YouTube](https://www.youtube.com/watch?v=WgSc1nv_4Gw)
 - [¿Simplemente qué es Node.js? - IBM Developer Works, 2011](https://www.ibm.com/developerworks/ssa/opensource/library/os-nodejs/index.html)
-
-## Evaluación
-
-### Tech
-
-| Habilidad              | Nivel esperado |
-| ---------------------- | -------------- |
-| **JavaScript**         |                |
-| Estilo                 | 4              |
-| Nomenclatura/semántica | 3              |
-| Funciones/modularidad  | 3              |
-| Estructuras de datos   | 2              |
-| Tests                  | 4              |  |
-| **SCM**                |                |
-| Git                    | 3              |
-| GitHub                 | 3              |
-| **CS**                 |                |
-| Lógica                 | 3              |
-| Arquitectura           | 3              |
-| Patrones/paradigmas    | n/a            |
-
-### Habilidades Blandas
-
-Para este proyecto esperamos que ya hayas alcanzado el nivel 4 en todas tus
-habilidades blandas. Te aconsejamos revisar la rúbrica:
-
-| Habilidad                                                  | Nivel esperado |
-| ---------------------------------------------------------- | -------------- |
-| Planificación y organización                               | 4              |
-| Autoaprendizaje                                            | 4              |
-| Solución de Problemas                                      | 4              |
-| Dar y recibir feedback                                     | 4              |
-| Adaptabilidad                                              | 4              |
-| Trabajo en equipo (trabajo colaborativo y responsabilidad) | 4              |
-| Comunicación eficaz                                        | 4              |
-| Presentaciones                                             | 4              |
-
-## Checklist
-
-### General
-
-- [ ] Entrega el link del módulo publicado en npm
-
-### `README.md`
-
-- [ ] Un board con el backlog para la implementación de la librería.
-- [ ] Documentación técnica de la librería.
-- [ ] Guía de uso e instalación de la librería
-
-### Pruebas / tests
-
-- [ ] Pruebas unitarias cubren un mínimo del 70% de statements, functions,
-      lines, y branches.
-- [ ] Pasa tests (y linters) (`npm test`).

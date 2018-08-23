@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-const mdlinks= require ("./index.js");
+const mdLinks= require ("./index.js");
 const program = require('commander');
 let options = {
     validate:null,
@@ -15,6 +15,6 @@ let options = {
     options.validate = program.validate;
     options.stats = program.stats;
 
-    mdlinks(file,options)
+    mdLinks(file,options)
   })
   .parse(process.argv);
