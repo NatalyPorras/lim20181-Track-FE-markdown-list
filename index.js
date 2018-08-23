@@ -1,86 +1,20 @@
-
+const path = require('path');
 const fs = require('fs');
 const fetch = require('node-fetch');
+const marked = require('marked');
+const renderer = new marked.Renderer();
 
-const validarExtensionMD = (ruta, options) => {
 
-  const path_splitted = ruta.split('.');
-  const extension = path_splitted.pop();
-  if (extension == 'md') {
-    readFile(ruta, options);
-  }
-}
+/* let contador = 0,contadorLinkOk =0 ,contadorLinkBad=0;
 const validarExtensionDirectorio = (ruta, files, options) => {
-
   const archivo = ruta + "/" + files
-
-  
   validarExtensionMD(archivo, options);
-
 }
-
-const readFile = (archivo, options) => {
-  fs.readFile(archivo, (err, data) => {
-    const text = data.toString();
-
-    const reg1 = /[^()](ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/gi;
-    const reg2 = /\[([\w\s]*)\]\((ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?\)/gi;
-    let result1 = text.match(reg1);
-    let result2 = text.match(reg2);
-
-    if (result1) {
-      result1.forEach(result => {
-        console.log(archivo + ' ' + result)
-        /*               fetch(result).then(function (response) {
-                        if(response.status >= 200 && response.status < 400){
-                          // contUrlOK++ ;
-                          // console.log(archivo + " " + result + " " + response.status + "No tiene titulo"); 
-                        }else if(response.status > 400){
-                          // contUrlBad++ ;
-                            // console.log(archivo + " " + result + " " + response.status + "No tiene titulo"); 
-                        }
-        
-                      })  */
-      })
-      // console.log(contUrlOK,contUrlBad);
-    }
-    if (result2) {
-      result2.forEach(result => {
-        console.log(archivo + ' ' + result)
-
-        // console.log( result.replace(/[\[\]]/g, '') );
-
-      })
-    }
-    /*  .forEach((item) => {
- 
-     console.log(item)
-   }); */
-    // console.log(result2)
-
-    /*  .forEach((item) => {
- 
-     console.log(item)
-     console.log( item.replace(/[\[\]]/g, '') );
-   }); */
-    // console.log(result2)
-
-    /*       text.replace(expression, (url) => {
-              fetch(url).then(function (response) {
-                if(response.status >= 200 && response.status < 400){
-                  // contUrlOK++ ;
-                  console.log(archivo + " " + url + " " + response.status); 
-                }else if(response.status > 400){
-                  // contUrlBad++ ;
-                  console.log(archivo + " " + url + " " + response.status); 
-                }
-                // console.log(contUrlOK,contUrlBad);
-    
-              });
-          }) */
-  });
+const contadorURL = (contador,contadorLinkBad,contadorLinkOk) => {
+  console.log("total" + contador);
+  console.log("ok" + contadorLinkBad);
+  console.log("fail" + contadorLinkOk);  
 }
-
 const readDirect = (val, options) => {
   fs.readdir(val, (err, files) => {
     if (err) {
@@ -93,20 +27,156 @@ const readDirect = (val, options) => {
         if (stat.isDirectory()) {
           mdLinks(newDirectory, options)
         }
-      })
-    }
+      });
+    });
   });
+} */
+const statusURL = (links) => {
+  let stats = fetch(links.href)
+    .then(elemento => {
+      return links.status = elemento.status;
+    })
+    .catch(error => {
+      return links.status = error.code;
+/*     console.log(links.href + ' --- ' + error.code)
+ */  })
+
+
+  return stats
+}
+
+const datosObjeto = (elemento, newRuta) => {
+  console.log(elemento)
+  const objLinks = {};
+/* elemento.forEach(dat =>{
+  if (dat.substr(0, 1) === '[' && dat.substr(-1, 1) === ')') {
+
+    const eliminarParentesis = dat.replace(/\(.*\)/g, '');
+    const textoURL = eliminarParentesis.replace(/[\[\]']/gi, '');
+    //despejar url
+    const eliminarCorchete = dat.replace(/\[.*\]/g, '');
+    const soloUrl = eliminarCorchete.replace(/[\(\)']/gi, '')
+
+    objLinks.href = soloUrl;
+    objLinks.text = textoURL;
+    objLinks.file = newRuta;
+
+    return objLinks;
+
+  } else {
+    let modifiedResult = elemento.replace(/[\n]/gi, '')
+
+    objLinks.href = modifiedResult;
+    objLinks.text = "(no tiene nombre)";
+    objLinks.file = newRuta;
+
+    return objLinks;
+  }
+}) */
+
+}
+
+const leerArchivo = (array) => {
+  array.forEach(elemento =>{
+    fs.readFile(elemento, 'utf8', (err, data) => {
+    if (err) throw err;
+    const htmlMD = marked(data);
+    const despejando =  htmlMD.match('<([a]+)*[^/]*?>');
+    console.log(despejando);
+    
+/* 
+    despejando.forEach(line =>{
+      const links = line.match('a');
+      console.log(links);
+      
+    }) */
+    
+/*       
+     renderer.link = function (data, level) {
+       
+  var escapedText = data.toLowerCase().replace(/[^\w]+/g, '-');
+  console.log(text,level,escapedText);
+
+  return escapedText;
+};
+
+
+console.log(elemento, { renderer: renderer }); */
+
+    // console.log(texto);
+    
+    // const reg1 = /[^()](ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/gi;
+    // const reg2 = /\[([\w\s]*)\]\((ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?\)/gi;
+    // const urlsTotal = text.match(reg1).concat(text.match(reg2));
+    //   console.log(urlsTotal)
+  })
+
+  })
+/*   const arrayLinks = urlsTotal.map(elemento => {
+    const links = datosObjeto(elemento, newRuta)
+    const stats = statusURL(links);
+    return stats;
+  });
+  console.log(arrayLinks)
+
+  return arrayLinks; */
+}
+
+const validarDirectorio = (ruta) => {
+  let ar;
+  let newarray = [];
+
+  fs.readdir(ruta, (err, files) => {
+    if (err) {
+      throw err;
+    }
+
+    files.forEach(elemento => {
+      const extension = path.extname(elemento);
+      if (extension === '.md') {
+        newarray.push(ruta+'/'+elemento);
+      } else if (!!extension) {
+        return elemento
+      } else {
+        let newRuta = ruta + '/' + elemento;
+        validarDirectorio(newRuta)
+      }
+    })
+
+    ar = leerArchivo(newarray);
+
+    return ar;
+
+  })
+
+}
+
+
+['readme.md']
+['uno.md', 'dos.md', 'tres.md']
+const leerMd = (arr) => {
+  arr.for
+  fs.readFile()
+  [{}, {}, {}]
 }
 
 const mdLinks = (ruta, options) => {
-  fs.stat(ruta, (error, data) => {
-    if (data.isFile()) {
-      validarExtensionMD(ruta, options);
-    } else if (data.isDirectory()) {
-      readDirect(ruta, options);
-    }
+  return new Promise((resolve, reject) => {
+    fs.stat(ruta, (err, data) => {
+      if (err) return reject(err);
+      if (data.isFile()) {
+        return resolve(validarArchivo(ruta))
+      } else {
+        return resolve(validarDirectorio(ruta));
+      };
+    });
   })
+
 }
+/* 
+mdLinks('./src')
+.then((data) => {
+  console.log(data)
+}) */
 
 module.exports = mdLinks;
-
