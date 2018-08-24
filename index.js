@@ -2,6 +2,7 @@ const path = require('path');
 const fs = require('fs');
 const fetch = require('node-fetch');
 const marked = require('marked');
+
 /* 
 const statusURL = (links) => {
   links.forEach(data => {
@@ -95,59 +96,66 @@ const validarArchivo = (ruta) => {
   const extension = path.extname(ruta);
   if (extension === '.md') {
     return ruta;
-  }else{
-    return 'no es md  '
-  }
+  } 
 }
-const readFile = (ruta,options,cb) =>{
+const readFile = (ruta, options, cb) => {
   const arrayFile = [];
   const validacion = validarArchivo(ruta);
-  fs.readFile(validacion,(err,data)=>{
+  fs.readFile(validacion, (err, data) => {
     arrayFile.push(validacion);
-    cb(err,arrayFile);
+    cb(err, arrayFile);
   })
-  
+
 }
 
-const reaDirectory = (ruta,options,cb) =>{
-    const arrayLinksDirectory = [];    
-    fs.readdir(ruta,(err,file) =>{
-    file.forEach(files =>{
-      
-      let newRuta = ruta +files;
-      arrayLinksDirectory.push(newRuta)
-          // if(stat.isFile()){
-          //   readFile(files,options,(err,result)=>{
-          //     cb(err,result);
-            // })
-          // console.log(files);
-            
-          // }else if(stat.isDirectory()){
-          //   let newRuta=path.resolve(ruta,files);
-          //   reaDirectory(newRuta,options,(err,result)=>{
-          //     cb(err,result);
-          //   })
-          // console.log('no es file');
-    
-          // }
-    })
-      // cb(err,data)
-      console.log(arrayLinksDirectory);
+const readDirectory = (ruta, options, cb) => {
+  const arrayLinksDirectory = [];
+
+  fs.readdir(ruta, (err, file) => {
+    file.forEach(files => {
+
+      let newRuta = path.resolve(ruta, files);
+
+      fs.stat(newRuta, (err, file) => {
+        if (err) throw err.code;
+        if (file.isDirectory()) {
+          
+          readDirectory(newRuta,options, (err, data) => {
+
+                let fileMD = validarArchivo(newRuta);
+
+                readFile(fileMD,options,(err,file)=>{
+
+                })
+
+          });
+        } else{
+
+          const filesMD = validarArchivo(newRuta);
+              arrayLinksDirectory.push(filesMD)
+        }
+        console.log(arrayLinksDirectory);
+
+      });
 
     })
-    
-} 
+    // cb(err,data)
+    // console.log(arrayLinksDirectory);
+
+  })
+
+}
 
 const mdLinks = (ruta, options) => {
   return new Promise((resolve, reject) => {
     fs.stat(ruta, (err, data) => {
       if (data.isFile()) {
-        readFile(ruta,options, (err,result) =>{
+        readFile(ruta, options, (err, result) => {
           resolve(result)
         });
         // resolve(leerArchivo(ruta,options))
       } else {
-        reaDirectory(ruta,options,(err,result)=>{
+        readDirectory(ruta, options, (err, result) => {
           resolve(result);
         })
         // resolve(directorio(ruta, options))
