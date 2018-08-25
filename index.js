@@ -3,8 +3,8 @@ const fs = require('fs');
 const fetch = require('node-fetch');
 const marked = require('marked');
 
-/* 
-const statusURL = (links) => {
+
+/* const statusURL = (links) => {
   links.forEach(data => {
     fetch(data.href)
       .then(elemento => {
@@ -15,10 +15,11 @@ const statusURL = (links) => {
    console.log(links.href + ' --- ' + error.code)
  })
   })
-} */
-
-/* const searchLinks = (data, elemento) => {
+}
+ */
+const searchLinks = (data, elemento) => {
   const array = [];
+
   const obj = {}
   const renderer = new marked.Renderer();
   renderer.link = function (href, title, text) {
@@ -27,14 +28,16 @@ const statusURL = (links) => {
     obj.file = elemento;
 
     array.push(obj)
-    
-  }
-  marked(data, { renderer: renderer });
-  console.log(array);
-  return array;
-} */
+    console.log(array);
 
-/* const readFile = (nameFile) => {
+    return '';
+  }
+  marked(data, { renderer });
+  
+  return array;
+}
+
+const readFile = (nameFile) => {
   const promise = new Promise((resolve, reject) => {
     fs.readFile(nameFile, 'utf8', (err, data) => {
       if (err) reject(err);
@@ -43,9 +46,10 @@ const statusURL = (links) => {
   });
 
   return promise
-} */
-/* const leerArchivo = (array) => {
+}
 
+
+const leerArchivo = (array)=>{
   const arrayPromises = array.map(elemento => readFile(elemento));
 
   return Promise.all(arrayPromises)
@@ -54,43 +58,12 @@ const statusURL = (links) => {
 
       const arrayAllLinks = [];
       responses.forEach(data => {
-        // console.log(data);
 
         arrayAllLinks.push(data)
       })
-      // console.log(arrayAllLinks);
-
       return arrayAllLinks
     })
-}
- */
-const getFile = (ruta) => {
-  const newarray = [];
-  if (err) return reject(err);
 
-  fs.readdir(ruta, (err, files) => {
-    if (err) {
-      throw err;
-    }
-    files.forEach(elemento => {
-      const extension = path.extname(elemento);
-      if (extension === '.md') {
-        newarray.push(ruta + '/' + elemento);
-
-      } else if (!!extension) {
-        return elemento
-      } else {
-        let newRuta = ruta + '/' + elemento;
-        readDirectorio(newRuta)
-      }
-    })
-
-    /*     leerArchivo(newarray)
-          .then(data => {
-            // console.log(data);
-    
-          }) */
-  })
 }
 const validarArchivo = (ruta) => {
   const extension = path.extname(ruta);
@@ -98,67 +71,52 @@ const validarArchivo = (ruta) => {
     return ruta;
   } 
 }
-const readFile = (ruta, options, cb) => {
+const contentArchivos= (ruta) => {
   const arrayFile = [];
-  const validacion = validarArchivo(ruta);
-  fs.readFile(validacion, (err, data) => {
-    arrayFile.push(validacion);
-    cb(err, arrayFile);
-  })
+  const rutaMd = validarArchivo(ruta);
+  arrayFile.push(rutaMd);
+  let arf = leerArchivo(arrayFile)
 
+  return arf
 }
 
-const readDirectory = (ruta, options, cb) => {
-  const arrayLinksDirectory = [];
-
-  fs.readdir(ruta, (err, file) => {
-    file.forEach(files => {
-
-      let newRuta = path.resolve(ruta, files);
-
-      fs.stat(newRuta, (err, file) => {
-        if (err) throw err.code;
-        if (file.isDirectory()) {
-          
-          readDirectory(newRuta,options, (err, data) => {
-
-                let fileMD = validarArchivo(newRuta);
-
-                readFile(fileMD,options,(err,file)=>{
-
-                })
-
-          });
-        } else{
-
-          const filesMD = validarArchivo(newRuta);
-              arrayLinksDirectory.push(filesMD)
-        }
-        console.log(arrayLinksDirectory);
-
-      });
-
-    })
-    // cb(err,data)
-    // console.log(arrayLinksDirectory);
-
-  })
-
+const readDirectory = (dir,files_) => {
+  // console.log(dir,files_);
+  
+  files_ = files_ || [];
+  
+  var files = fs.readdirSync(dir);
+  for (var i in files){
+      var name = dir + '/' + files[i];
+      if (fs.statSync(name).isDirectory()){
+        
+          readDirectory(name, files_);
+      } else {
+        const rutaMd = validarArchivo(name);
+        if(!!rutaMd)
+          files_.push(rutaMd);
+      }
+  }
+  let ar = leerArchivo(files_); 
+  return ar;
 }
 
-const mdLinks = (ruta, options) => {
+const readdir = ruta => new Promise((resolve, reject) => fs.readdir(
+  ruta,
+  (err, files) => err ? reject(er) : resolve(files),
+));
+
+const mdLinks = (ruta) => {
   return new Promise((resolve, reject) => {
     fs.stat(ruta, (err, data) => {
+      if (err) return reject(err);
+
       if (data.isFile()) {
-        readFile(ruta, options, (err, result) => {
-          resolve(result)
-        });
-        // resolve(leerArchivo(ruta,options))
+  
+        resolve(contentArchivos(ruta))
       } else {
-        readDirectory(ruta, options, (err, result) => {
-          resolve(result);
-        })
-        // resolve(directorio(ruta, options))
+  
+        resolve(readDirectory(ruta))
       };
     });
   })
