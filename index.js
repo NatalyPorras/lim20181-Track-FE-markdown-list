@@ -9,6 +9,35 @@ const valoresUnicos = (links) => {
   return [...new Set(links)];
 }
 
+const optionsValidateSats = (links, options) => {
+  const newArrayUrl = links.map(url => {
+    return url.href;
+  })
+  if (!options.validate && !options.stats) {
+    links.forEach(link => {
+      // console.log(` ${link.file} \t ${link.href}  \t a  ${link.text}`);
+      return ` ${link.file} \t ${link.href}  \t a  ${link.text}`;
+    });
+  } else if (options.validate === true && options.stats === undefined) {
+    links.forEach(link => {
+      // console.log(` ${link.file}  \t  ${link.href}  \t  ${link.statusText}  \t  ${link.status}  \tLink a   ${link.text}`);
+      return ` ${link.file}  \t  ${link.href}  \t  ${link.statusText}  \t  ${link.status}  \tLink a   ${link.text}`;
+
+    })
+  } else if (options.validate === undefined && options.stats === true) {
+
+    return ` total:  ${links.length} unicos: ${valoresUnicos(newArrayUrl).length}`;
+  } else if (options.validate === true && options.stats === true) {
+    let brokenurl = 0;
+    links.forEach(link => {
+      if (link.status > 400 || link.codeError) {
+        return brokenurl++
+      }
+    })
+    return ` total:  ${links.length} unicos: ${valoresUnicos(newArrayUrl).length} rotos: ${brokenurl}`;
+
+  }
+}
 
 const validateLInks = (links) => {
 
