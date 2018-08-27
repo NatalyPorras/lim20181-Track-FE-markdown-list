@@ -58,7 +58,8 @@ para tus pruebas unitarias.
 
 Para comenzar este proyecto tendrás que hacer un _fork_ y _clonar_ este
 repositorio.
-
+- [File System](https://nodejs.org/api/fs.html)
+- [marked](https://github.com/markedjs/marked)
 Antes de comenzar a codear, es necesario crear un plan de acción. Esto debería
 quedar detallado en el `README.md` de tu repo y en una serie de _issues_
 y _milestones_ para priorizar y organizar el trabajo, y para poder hacer
@@ -79,7 +80,7 @@ Tópicos:
 - [Path](https://nodejs.org/api/path.html)
 - [File System](https://nodejs.org/api/fs.html)
 - [marked](https://github.com/markedjs/marked)
-- [Asíncronía en js](https://carlosazaustre.com/manejando-la-asincronia-en-javascript/)
+- [Asíncronía en js](https://carlostre.com/manejando-la-asincronia-en-javascript/)
 
 
 ### JavaScript API
