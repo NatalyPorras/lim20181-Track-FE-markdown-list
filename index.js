@@ -13,15 +13,6 @@ const readFile = (nameFile) => {
   });
 }
 
-const statFile = (ruta) => {
-  return new Promise((resolve, reject) => {
-    fs.stat(ruta, (err, data) => {
-      if (err) return reject(err);
-      resolve(data)
-    })
-  })
-}
-
 const mdLinks = (ruta, options) => {
   return statFile(ruta)
     .then(result => {
