@@ -1,6 +1,20 @@
 const path = require('path');
 const fs = require('fs');
 
+const validateLInks = (links) => {
+
+  return fetch(links.href)
+    .then(response => {
+      links.status = response.status;
+      links.statusText = response.statusText;
+      return links
+    })
+    .catch(err => {
+      links.codeError = err.code;
+      return links
+    })
+}
+
 const searchLinks = (data, elemento) => {
   const renderer = new marked.Renderer();
   renderer.link = function (href, title, text) {
