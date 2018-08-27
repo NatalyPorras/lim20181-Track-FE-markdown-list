@@ -25,27 +25,24 @@ const validateLInks = (links) => {
 
 const optionsValidateSats = (links, options) => {
 
-  const newArrayUrl = links.map(url => {
-    return url.href;
+  const newArrayUrl = links.map(link => {
+    return link.href;
   })
-
-  if (!options.validate && !options.stats) {
+  if (options.validate === undefined && options.stats === undefined) {
     let resultArray = '';
     links.forEach(link => {
-      resultArray += ` ${link.file} \t ${link.href} \t a ${link.text} \n`;
+      resultArray += `${link.file}\t${link.href}\ta ${link.text}\n`;
     });
     return resultArray
   } else if (options.validate === true && options.stats === undefined) {
     let resultArray = '';
-
     links.forEach(link => {
-      resultArray += ` ${link.file}  \t  ${link.href}  \t  ${link.statusText}  \t  ${link.status}  \tLink a   ${link.text}\n`;
-
+      resultArray += `${link.file}\t${link.href}\t${link.statusText}\t${link.status}\tLink a ${link.text}\n`;
     })
     return resultArray
   } else if (options.validate === undefined && options.stats === true) {
 
-    return ` total:  ${links.length} unicos: ${valoresUnicos(newArrayUrl).length}`;
+    return `total:${links.length}\nunicos:${valoresUnicos(newArrayUrl).length}`;
   } else if (options.validate === true && options.stats === true) {
     let brokenurl = 0;
     links.forEach(link => {
@@ -53,7 +50,7 @@ const optionsValidateSats = (links, options) => {
         return brokenurl++
       }
     })
-    return ` total:  ${links.length} unicos: ${valoresUnicos(newArrayUrl).length} rotos: ${brokenurl}`;
+    return `total:${links.length}\nunicos:${valoresUnicos(newArrayUrl).length}\nrotos:${brokenurl}`;
 
   }
 }
@@ -117,8 +114,8 @@ const getFilesMDFile = (ruta) => {
     .then(fileMD => {
       return Promise.all(fileMD)
     })
-
 }
+
 const getFilesMDDir = (ruta) => {
 
   return statFile(ruta)
@@ -134,6 +131,7 @@ const getFilesMDDir = (ruta) => {
           .then(validateFile)
       }
     })
+    .then(result => result)
 
 }
 
@@ -160,9 +158,7 @@ const mdLinks = (ruta, options) => {
                 return searchLinks(resultado, ruta)
               }))
           })
-          .then(result2 => {
-            return arrayPlano(result2)
-          })
+          .then(arrayPlano)
           .then(objLinksDir => {
             return objLinksDir.map(validateLInks)
           })

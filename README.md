@@ -13,7 +13,7 @@ Como libreria utilizada para extraer los links se implemento `MARKED`, gracias a
 `npm install <github-user>/md-links` ó `npm install linksmarkdown`
 
 ## Versión
-`0.1.3`
+`1.0.6`
 
 ## Modo de Uso en CLI
 
