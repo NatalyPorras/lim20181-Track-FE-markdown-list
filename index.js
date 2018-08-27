@@ -1,6 +1,10 @@
 const path = require('path');
 const fs = require('fs');
 
+const valoresUnicos = (links) => {
+  return [...new Set(links)];
+}
+
 const validateLInks = (links) => {
 
   return fetch(links.href)
