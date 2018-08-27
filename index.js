@@ -2,7 +2,6 @@ const path = require('path');
 const fs = require('fs');
 
 const searchLinks = (data, elemento) => {
-
   const renderer = new marked.Renderer();
   renderer.link = function (href, title, text) {
     array.push({ href, text, file: elemento })
