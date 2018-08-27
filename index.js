@@ -1,5 +1,5 @@
-const path = require('path');
 const fs = require('fs');
+const path = require('path');
 const fetch = require('node-fetch');
 const marked = require('marked');
 const expresionRegulaMD = /(\.|\/)(md|markdown|mdown|mkdn|mkd|mdwn|mdtxt|mdtext)$/gi;
@@ -9,21 +9,40 @@ const valoresUnicos = (links) => {
   return [...new Set(links)];
 }
 
+const validateLInks = (links) => {
+  return fetch(links.href)
+    .then(response => {
+      links.status = response.status;
+      links.statusText = response.statusText;
+      return links
+    })
+    .catch(err => {
+      links.codeError = err.code;
+      return links
+    })
+
+}
+
 const optionsValidateSats = (links, options) => {
+
   const newArrayUrl = links.map(url => {
     return url.href;
   })
+
   if (!options.validate && !options.stats) {
+    let resultArray = '';
     links.forEach(link => {
-      // console.log(` ${link.file} \t ${link.href}  \t a  ${link.text}`);
-      return ` ${link.file} \t ${link.href}  \t a  ${link.text}`;
+      resultArray += ` ${link.file} \t ${link.href} \t a ${link.text} \n`;
     });
+    return resultArray
   } else if (options.validate === true && options.stats === undefined) {
+    let resultArray = '';
+
     links.forEach(link => {
-      // console.log(` ${link.file}  \t  ${link.href}  \t  ${link.statusText}  \t  ${link.status}  \tLink a   ${link.text}`);
-      return ` ${link.file}  \t  ${link.href}  \t  ${link.statusText}  \t  ${link.status}  \tLink a   ${link.text}`;
+      resultArray += ` ${link.file}  \t  ${link.href}  \t  ${link.statusText}  \t  ${link.status}  \tLink a   ${link.text}\n`;
 
     })
+    return resultArray
   } else if (options.validate === undefined && options.stats === true) {
 
     return ` total:  ${links.length} unicos: ${valoresUnicos(newArrayUrl).length}`;
@@ -39,19 +58,7 @@ const optionsValidateSats = (links, options) => {
   }
 }
 
-const validateLInks = (links) => {
 
-  return fetch(links.href)
-    .then(response => {
-      links.status = response.status;
-      links.statusText = response.statusText;
-      return links
-    })
-    .catch(err => {
-      links.codeError = err.code;
-      return links
-    })
-}
 
 const searchLinks = (data, elemento) => {
   const renderer = new marked.Renderer();
@@ -77,10 +84,8 @@ const arrayPlano = (array) => {
 }
 
 const readFile = (nameFile) => {
-  
-  return new Promise((resolve, reject) => {
-    // let newfiles = './' + nameFile
 
+  return new Promise((resolve, reject) => {
     fs.readFile(nameFile, 'utf8', (err, data) => {
       if (err) reject(err);
       resolve(data);
@@ -103,18 +108,18 @@ const readdir = (ruta) => {
   ))
 };
 
-const getFilesMDFile =(ruta) =>{
+const getFilesMDFile = (ruta) => {
   return statFile(ruta)
-  .then(dataFile =>{
-    if (dataFile.isFile() && expresionRegulaMD.test(path.extname(ruta))) {
-      return [ruta];
-    }
-  })
-  .then(file => file.map(readFile))
-  .then(fileMD=>{
-    return Promise.all(fileMD)
-  })
-  
+    .then(dataFile => {
+      if (dataFile.isFile() && expresionRegulaMD.test(path.extname(ruta))) {
+        return [ruta];
+      }
+    })
+    .then(file => file.map(readFile))
+    .then(fileMD => {
+      return Promise.all(fileMD)
+    })
+
 }
 const getFilesMDDir = (ruta) => {
 
@@ -139,14 +144,14 @@ const mdLinks = (ruta, options) => {
     .then(result => {
       if (result.isFile()) {
         return getFilesMDFile(ruta)
-        .then(resulArrayT => resulArrayT.map(resultado => {
-          return searchLinks(resultado, ruta)
-        }))
-        .then(arrayPlano)
-          .then(objLinks => objLinks.map(validateLInks))
-          .then(linksStatus => {
-            return Promise.all(linksStatus)
-              .then(objLinks => optionsValidateSats(objLinks, options))
+          .then(resulArrayNew => resulArrayNew.map(resultadoTotal => {
+            return searchLinks(resultadoTotal, ruta)
+          }))
+          .then(arrayPlano)
+          .then(objLinksfile => objLinksfile.map(validateLInks))
+          .then(linksStatusFile => {
+            return Promise.all(linksStatusFile)
+              .then(objLinksResult => optionsValidateSats(objLinksResult, options))
           })
       } else if (result.isDirectory()) {
         return getFilesMDDir(ruta)
@@ -157,14 +162,19 @@ const mdLinks = (ruta, options) => {
                 return searchLinks(resultado, ruta)
               }))
           })
-          .then(arrayPlano)
-          .then(objLinks => objLinks.map(validateLInks))
+          .then(result2 => {
+            return arrayPlano(result2)
+          })
+          .then(objLinksDir => {
+            return objLinksDir.map(validateLInks)
+          })
           .then(linksStatus => {
             return Promise.all(linksStatus)
-              .then(objLinks => optionsValidateSats(objLinks, options))
+            .then(objLinks => optionsValidateSats(objLinks, options))
           })
       }
     })
 }
 
 module.exports = mdLinks;
+
