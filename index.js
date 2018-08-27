@@ -12,6 +12,21 @@ const readFile = (nameFile) => {
     })
   });
 }
+const statFile = (ruta) => {
+  return new Promise((resolve, reject) => {
+    fs.stat(ruta, (err, data) => {
+      if (err) return reject(err);
+      resolve(data)
+    })
+  })
+}
+
+const readdir = (ruta) => {
+  return new Promise((resolve, reject) => fs.readdir(
+    ruta,
+    (err, files) => err ? reject(err) : resolve(files),
+  ))
+};
 
 const mdLinks = (ruta, options) => {
   return statFile(ruta)
