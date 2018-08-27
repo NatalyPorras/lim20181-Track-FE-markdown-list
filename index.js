@@ -1,6 +1,19 @@
 const path = require('path');
 const fs = require('fs');
 
+const validateFile = (arrayMD) => {
+  let newArray = arrayMD.filter(function (dato) {
+    return dato != undefined
+  });
+  return newArray
+}
+
+const arrayPlano = (array) => {
+  return array.reduce((memo, item) => {
+    return memo.concat(item);
+  }, []);
+}
+
 const readFile = (nameFile) => {
   
   return new Promise((resolve, reject) => {
@@ -27,6 +40,37 @@ const readdir = (ruta) => {
     (err, files) => err ? reject(err) : resolve(files),
   ))
 };
+
+const getFilesMDFile =(ruta) =>{
+  return statFile(ruta)
+  .then(dataFile =>{
+    if (dataFile.isFile() && expresionRegulaMD.test(path.extname(ruta))) {
+      return [ruta];
+    }
+  })
+  .then(file => file.map(readFile))
+  .then(fileMD=>{
+    return Promise.all(fileMD)
+  })
+  
+}
+const getFilesMDDir = (ruta) => {
+
+  return statFile(ruta)
+    .then(dataFile => {
+      if (dataFile.isFile() && expresionRegulaMD.test(path.extname(ruta))) {
+        return [ruta];
+      } else if (dataFile.isDirectory()) {
+        return readdir(ruta)
+          .then(files => files.map(newfiles => getFilesMDDir(path.join(ruta, newfiles))))
+          .then(result => {
+            return Promise.all(result).then(arrayPlano)
+          })
+          .then(validateFile)
+      }
+    })
+
+}
 
 const mdLinks = (ruta, options) => {
   return statFile(ruta)
