@@ -17,7 +17,7 @@ const validateLInks = (links) => {
       return links
     })
     .catch(err => {
-      links.codeError = err.code;
+      links.status = err.code;
       return links
     })
 
