@@ -58,8 +58,6 @@ const optionsValidateSats = (links, options) => {
   }
 }
 
-
-
 const searchLinks = (data, elemento) => {
   const renderer = new marked.Renderer();
   renderer.link = function (href, title, text) {
@@ -84,7 +82,6 @@ const arrayPlano = (array) => {
 }
 
 const readFile = (nameFile) => {
-
   return new Promise((resolve, reject) => {
     fs.readFile(nameFile, 'utf8', (err, data) => {
       if (err) reject(err);
@@ -92,6 +89,7 @@ const readFile = (nameFile) => {
     })
   });
 }
+
 const statFile = (ruta) => {
   return new Promise((resolve, reject) => {
     fs.stat(ruta, (err, data) => {
@@ -170,7 +168,7 @@ const mdLinks = (ruta, options) => {
           })
           .then(linksStatus => {
             return Promise.all(linksStatus)
-            .then(objLinks => optionsValidateSats(objLinks, options))
+              .then(objLinks => optionsValidateSats(objLinks, options))
           })
       }
     })
