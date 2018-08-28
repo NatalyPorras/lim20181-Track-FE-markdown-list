@@ -1,54 +1,114 @@
-const mdLinks = require('../index.js');
-const path = require('path');
+const mdLinks = require('../index');
 
-describe('testear funcion md-links', () => {
-	it('mdLinks ', (done) => {
-		    const options = {
-		        stats: undefined,
-		        validate: undefined
-		    };
-		    mdLinks('./test/test2/cuatro.md', options)
-		        .then(resultadoLinks => {
-		            expect(resultadoLinks).toEqual( "./test/test2/cuatro.md\thttps://es.wikipedia.org/wiki/Markdown\ta Markdown\n")
-		            done();
-		        });
-		});
-	it('mdLinks --validate', (done) => {
-		const options = {
-			stats: undefined,
-			validate: true
-		};
-		mdLinks('./test/testsMD/tres.md', options).then((resultStats) => {
-			expect(resultStats).toEqual("./test/testsMD/tres.md\thttps://es.wikipedia.org/wiki/Markdown  \t ok \t 200 \t link a Markdown \n");
-		});
-		done()
-	});
-	it('mdLinks --stats --validate', (done) => {
-		const options = {
-			stats: true,
-			validate: true
-		};
-		mdLinks('./test/testsMD/tres.md', options).then((resultStatsValidate) => {
-			expect(resultStatsValidate).toEqual('total:1\nunicos:1\nrotos:0');
+const options = {
+	validate: undefined,
+	stats: undefined
+}
 
-		});
-		done()
-	});
+test('Ingresar Archivo y obtener los links "md-links ./test/test2/cuatro.md" ', () => {
+	jest.setTimeout(10000)
+	options.validate = undefined;
+	options.stats = undefined;
+	return mdLinks('./test/test2/cuatro.md', options) 
+	.then(result1=>{
+		expect(result1).toBe("./test/test2/cuatro.md\thttps://es.wikipedia.org/wiki/Markdown\ta Markdown\n");
 
-	it('mdLinks --stats', (done) => {
-		const options = {
-			stats: true,
-			validate: undefined
-		};
-		mdLinks('./test/testsMD/tres.md', options).then((resultStat) => {
-			expect(resultStat).toEqual('total:1\nunicos:1');
-		});
-		done()
-	});
-})
+	})
+});
+test('Ingresar Directorio y obtener los links "md-links ./test/test2" ', () => {
+	jest.setTimeout(12000)
+	options.validate = undefined;
+	options.stats = undefined;
+	return mdLinks('./test/test2', options) 
+	.then(result2=>{
+		expect(result2).toBe("./test/test2\thttps://es.wikipedia.org/wiki/Markdown\ta Markdown\n");
+	})
+	
+});
+
+ test('Ingresar Directorio y obtener los links "md-links ./test/test2/cuatro.md --validate" ', () => {
+	jest.setTimeout(12000)
+	options.validate = true;
+	options.stats = undefined;
+	return mdLinks('./test/testsMD', options) 
+	.then(result3=>{
+		expect(result3).toBe("");
+	})
+	
+});
 
 
+test('Ingresar Archivo y obtener los links "md-links ./test/test2/cuatro.md --validate" ', () => {
+	jest.setTimeout(12000)
+	options.validate = true;
+	options.stats = undefined;
+	return mdLinks('./test/test2/cuatro.md', options) 
+	.then(result4=>{
+		expect(result4).toBe("./test/test2/cuatro.md\thttps://es.wikipedia.org/wiki/Markdown\tOK\t200\tLink a Markdown\r\n");
+	})
+	
+});
 
+/* test('Ingresar Directorio y obtener los links "md-links ./test/testsMD/tres.md --stats"', () => {
+	jest.setTimeout(12000)
+	options.stats = true;
+	options.validate = undefined;
+	return mdLinks('./test/testsMD/tres.md', options) 
+	.then(result5=>{
+		expect(result5).toBe("total:1\nunicos:1");
+	})
 
+});  */
+
+test('Ingresar Directorio y obtener los links "md-links ./test/testsMD --stats --validate"', () => {
+	jest.setTimeout(12000)
+
+	options.stats = true;
+	options.validate = true;
+	return mdLinks('./test/test2/cuatro.md', options) 
+	.then(result6=>{
+		expect(result6).toBe("total:1\nunicos:1\nrotos:0");
+	})
+});
+test('Ingresar Directorio y obtener los links "md-links ./test/testsMD --stats --validate"', () => {
+	jest.setTimeout(12000)
+
+	options.stats = true;
+	options.validate = true;
+	return mdLinks('./test/testsMD/tres.md', options) 
+	.then(result7=>{
+		
+		expect(result7).toBe("total:1\nunicos:1\nrotos:0");
+	})
+});
+
+test('Ingresar Directorio y obtener los links "md-links ./test/testsMD --stats --validate"', () => {
+	jest.setTimeout(12000)
+
+	options.stats = true;
+	options.validate = true;
+	return mdLinks('./test/test2', options) 
+	.then(result8=>{
+		console.log(result8);
+
+		expect(result8).toBe("total:1\nunicos:1\nrotos:0");
+	})
+});
+
+/* return mdLinks('./test/testsMD/tres.md', options) 
+.then(result4=>{
+	expect(result4).toBe("total:1\nunicos:1");
+}) */
+/* test('', () => {
+	options.stats = true;
+	options.validate = true;
+	return expect(Promise.resolve(mdLinks('./test/testsMD', options))).resolves.toBe("total:1\nunicos:1\nrotos:0");
+}); */
+/* test('', () => {
+	options.stats = true;
+	options.validate = true;
+	return expect(Promise.resolve(mdLinks('./test/testsMD/tres.md', options))).resolves.toBe("total:1\nunicos:1\nrotos:0");
+});
+ */
 
 
