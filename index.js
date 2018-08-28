@@ -30,7 +30,7 @@ const optionsValidateSats = (links, options) => {
   if (options.validate === undefined && options.stats === undefined) {
     let resultArray1 = '';
     links.forEach(link => {
-      resultArray1 += `${link.file}\t${link.href}\ta ${link.text}\n`;
+      resultArray1 += `${link.file}\t${link.href}\ta ${link.text}\r\n`;
     });
     return resultArray1
   } else if (options.validate === true && options.stats === undefined) {
@@ -42,7 +42,7 @@ const optionsValidateSats = (links, options) => {
   } else if (options.validate === undefined && options.stats === true) {
 
     return `total:${links.length}\nunicos:${valoresUnicos(newArrayUrl).length}`;
-    
+
   } else if (options.validate === true && options.stats === true) {
     let brokenurl = 0;
     links.forEach(link => {
