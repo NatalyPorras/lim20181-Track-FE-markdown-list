@@ -11,7 +11,7 @@ test('Ingresar Archivo y obtener los links "md-links ./test/test2/cuatro.md" ', 
 	options.stats = undefined;
 	return mdLinks('./test/test2/cuatro.md', options) 
 	.then(result1=>{
-		expect(result1).toBe("./test/test2/cuatro.md\thttps://es.wikipedia.org/wiki/Markdown\ta Markdown\n");
+		expect(result1).toBe("./test/test2/cuatro.md\thttps://es.wikipedia.org/wiki/Markdown\ta Markdown\r\n");
 
 	})
 });
@@ -21,7 +21,18 @@ test('Ingresar Directorio y obtener los links "md-links ./test/test2" ', () => {
 	options.stats = undefined;
 	return mdLinks('./test/test2', options) 
 	.then(result2=>{
-		expect(result2).toBe("./test/test2\thttps://es.wikipedia.org/wiki/Markdown\ta Markdown\n");
+		expect(result2).toBe("./test/test2\thttps://es.wikipedia.org/wiki/Markdown\ta Markdown\r\n");
+	})
+	
+});
+
+test('Ingresar Archivo y obtener los links "md-links ./test/test2/cuatro.md --validate" ', () => {
+	jest.setTimeout(12000)
+	options.validate = true;
+	options.stats = undefined;
+	return mdLinks('./test/test2/cuatro.md', options) 
+	.then(result4=>{
+		expect(result4).toBe("./test/test2/cuatro.md\thttps://es.wikipedia.org/wiki/Markdown\tOK\t200\tLink a Markdown\r\n");
 	})
 	
 });
@@ -37,17 +48,6 @@ test('Ingresar Directorio y obtener los links "md-links ./test/test2" ', () => {
 	
 });
 
-
-test('Ingresar Archivo y obtener los links "md-links ./test/test2/cuatro.md --validate" ', () => {
-	jest.setTimeout(12000)
-	options.validate = true;
-	options.stats = undefined;
-	return mdLinks('./test/test2/cuatro.md', options) 
-	.then(result4=>{
-		expect(result4).toBe("./test/test2/cuatro.md\thttps://es.wikipedia.org/wiki/Markdown\tOK\t200\tLink a Markdown\r\n");
-	})
-	
-});
 
 /* test('Ingresar Directorio y obtener los links "md-links ./test/testsMD/tres.md --stats"', () => {
 	jest.setTimeout(12000)
