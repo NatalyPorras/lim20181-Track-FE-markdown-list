@@ -17,6 +17,7 @@ const validateLInks = (links) => {
     })
     .catch(err => {
       links.status = err.code;
+
       return links
     })
 }
@@ -106,14 +107,10 @@ const readdir = (ruta) => {
 };
 
 const getFilesMDFile = (ruta) => {
-
     return readFile(ruta)
-      .then(result => {
-        console.log(result);
-        
+      .then(result => {  
         return result
       })
-
 }
 
 const getFilesMDDir = (ruta) => {
@@ -140,7 +137,8 @@ const getFilesMDDir = (ruta) => {
 }
 
 const mdLinks = (ruta, options) => {
-  return statFile(ruta)
+  return new Promise((resolve,reject)=>{
+    return statFile(ruta)
     .then(results => {
       if (results.isFile()) {
         return getFilesMDFile(ruta)
@@ -188,9 +186,11 @@ const mdLinks = (ruta, options) => {
       }
     })
     .then(objLinks => {
-      return optionsValidateSats(objLinks, options)
+      resolve(optionsValidateSats(objLinks, options))
     })
 
+  })
+  
 }
 
 module.exports = mdLinks;

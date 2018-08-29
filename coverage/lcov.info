@@ -1,5 +1,5 @@
 TN:
-SF:C:\Users\Porrasc\Documents\Nataly-Porras\lim20181-Track-FE-markdown-list\index.js
+SF:C:\Users\NatalyPorras\Documents\Nataly-Porras\lim20181-Track-FE-markdown-list\index.js
 FN:7,(anonymous_0)
 FN:11,(anonymous_1)
 FN:13,(anonymous_2)
@@ -49,11 +49,11 @@ FN:181,(anonymous_45)
 FN:185,(anonymous_46)
 FN:190,(anonymous_47)
 FNF:48
-FNH:48
+FNH:47
 FNDA:3,(anonymous_0)
 FNDA:6,(anonymous_1)
-FNDA:5,(anonymous_2)
-FNDA:1,(anonymous_3)
+FNDA:6,(anonymous_2)
+FNDA:0,(anonymous_3)
 FNDA:7,(anonymous_4)
 FNDA:6,(anonymous_5)
 FNDA:2,(anonymous_6)
@@ -107,11 +107,11 @@ DA:7,1
 DA:8,3
 DA:11,1
 DA:12,6
-DA:14,5
-DA:15,5
-DA:16,5
-DA:19,1
-DA:20,1
+DA:14,6
+DA:15,6
+DA:16,6
+DA:19,0
+DA:20,0
 DA:24,1
 DA:26,7
 DA:27,6
@@ -199,7 +199,7 @@ DA:186,3
 DA:191,7
 DA:196,1
 LF:100
-LH:98
+LH:96
 BRDA:30,0,0,2
 BRDA:30,0,1,5
 BRDA:30,1,0,7
